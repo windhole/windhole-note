@@ -1,12 +1,6 @@
 import type { Database } from "bun:sqlite";
 import { indentOf, parseLine } from "../shared/syntax";
-
-// バックリンク・2ホップの表示に必要なのはタイトルと遷移先だけなので、
-// lines を含む Page 全体ではなく軽量な参照を返す。
-export interface PageRef {
-  id: string;
-  title: string;
-}
+import type { PageRef } from "../shared/types";
 
 // code:lang 行より深くインデントされた行はコードブロックの中身なので、
 // リンク抽出の対象にしない(syntax.ts は1行単位の純粋関数のため、

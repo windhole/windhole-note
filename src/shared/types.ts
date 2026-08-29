@@ -11,6 +11,12 @@ export interface Page {
   deleted_at: number | null;
 }
 
+// バックリンク・2ホップ・検索結果など、一覧表示に使う軽量なページ参照
+export interface PageRef {
+  id: string;
+  title: string;
+}
+
 export interface Revision {
   id: number;
   page_id: string;
