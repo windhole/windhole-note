@@ -1,29 +1,16 @@
 import type { Database } from "bun:sqlite";
-import { indentOf, parseLine } from "../shared/syntax";
+import { groupLines } from "../shared/syntax";
 import type { PageRef } from "../shared/types";
 
-// code:lang 行より深くインデントされた行はコードブロックの中身なので、
-// リンク抽出の対象にしない(syntax.ts は1行単位の純粋関数のため、
-// この行跨ぎの状態管理は呼び出し側である本モジュールの責務)。
+// コードブロック内の行をリンク抽出の対象にしない、という行跨ぎの扱いは
+// groupLines に集約されている。ここでは line ブロックのノードを見るだけ
 export function extractLinkTitles(lines: string[]): string[] {
   const titles: string[] = [];
   const seen = new Set<string>();
-  let codeIndent: number | null = null;
 
-  for (const line of lines) {
-    const indent = indentOf(line);
-    if (codeIndent !== null) {
-      if (indent > codeIndent) continue;
-      codeIndent = null;
-    }
-
-    const nodes = parseLine(line);
-    if (nodes[0]?.type === "codeBlockStart") {
-      codeIndent = indent;
-      continue;
-    }
-
-    for (const node of nodes) {
+  for (const block of groupLines(lines)) {
+    if (block.type !== "line") continue;
+    for (const node of block.nodes) {
       if (node.type === "link" && node.title !== "" && !seen.has(node.title)) {
         seen.add(node.title);
         titles.push(node.title);

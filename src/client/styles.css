@@ -81,7 +81,50 @@ header input {
 }
 
 nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 0.75rem;
+}
+
+main > h1 {
+  font-size: 1.4rem;
+  margin: 0 0 0.75rem;
+}
+
+.content .line {
+  min-height: 1.6em;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.content .bullet {
+  color: #a8a29e;
+  margin-right: 0.4em;
+}
+
+.content img {
+  max-width: 100%;
+  max-height: 320px;
+  display: block;
+  margin: 0.25em 0;
+}
+
+.content pre {
+  background: #292524;
+  color: #e7e5e4;
+  border-radius: 6px;
+  padding: 0.75rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+.content .bold-2 {
+  font-size: 1.1em;
+}
+
+.content .bold-3 {
+  font-size: 1.25em;
 }
 
 .editor {
