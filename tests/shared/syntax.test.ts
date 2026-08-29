@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { indentOf, parseLine } from "../../src/shared/syntax";
+import { groupLines, indentOf, parseLine } from "../../src/shared/syntax";
 
 describe("parseLine", () => {
   test("記法を含まない行はそのままテキストノードになる", () => {
@@ -88,6 +88,47 @@ describe("parseLine", () => {
     test("行に他の内容が続く場合はマーカーとして扱わない", () => {
       expect(parseLine("code:js だよ")).toEqual([{ type: "text", text: "code:js だよ" }]);
     });
+  });
+});
+
+describe("groupLines", () => {
+  test("通常行はインデントを剥がしたノード列になる", () => {
+    expect(groupLines(["本文", "  ネスト [A]"])).toEqual([
+      { type: "line", indent: 0, nodes: [{ type: "text", text: "本文" }] },
+      {
+        type: "line",
+        indent: 2,
+        nodes: [
+          { type: "text", text: "ネスト " },
+          { type: "link", title: "A" },
+        ],
+      },
+    ]);
+  });
+
+  test("code:lang の後のインデント行はひとつの code ブロックにまとまる", () => {
+    expect(groupLines(["code:ts", " const a = 1;", " const b = 2;", "外側"])).toEqual([
+      { type: "code", lang: "ts", content: ["const a = 1;", "const b = 2;"] },
+      { type: "line", indent: 0, nodes: [{ type: "text", text: "外側" }] },
+    ]);
+  });
+
+  test("インデントされたコードブロックはマーカー基準で中身の字下げを剥がす", () => {
+    expect(groupLines(["  code:js", "    x = 1;"])).toEqual([
+      { type: "code", lang: "js", content: [" x = 1;"] },
+    ]);
+  });
+
+  test("末尾までコードブロックが続いても閉じる", () => {
+    expect(groupLines(["code:sh", " echo hi"])).toEqual([
+      { type: "code", lang: "sh", content: ["echo hi"] },
+    ]);
+  });
+
+  test("空行は空テキストの line ブロックになる", () => {
+    expect(groupLines([""])).toEqual([
+      { type: "line", indent: 0, nodes: [{ type: "text", text: "" }] },
+    ]);
   });
 });
 

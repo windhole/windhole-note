@@ -70,3 +70,41 @@ export function parseLine(line: string): Node[] {
 export function indentOf(line: string): number {
   return line.match(/^[ \t]*/)?.[0].length ?? 0;
 }
+
+export type LineBlock =
+  | { type: "code"; lang: string; content: string[] }
+  | { type: "line"; indent: number; nodes: Node[] };
+
+// 行を跨ぐ構造はコードブロックのみ(SPEC.md)。code:lang 行より深く
+// インデントされた行をひとつの code ブロックにまとめ、それ以外は
+// インデントを剥がした上で parseLine したノード列にする。
+// コードの中身はマーカーより1段深いインデントを剥がして返す。
+export function groupLines(lines: string[]): LineBlock[] {
+  const blocks: LineBlock[] = [];
+  let code: { lang: string; indent: number; content: string[] } | null = null;
+
+  for (const line of lines) {
+    const indent = indentOf(line);
+    if (code !== null) {
+      if (indent > code.indent) {
+        code.content.push(line.slice(code.indent + 1));
+        continue;
+      }
+      blocks.push({ type: "code", lang: code.lang, content: code.content });
+      code = null;
+    }
+
+    const nodes = parseLine(line);
+    const first = nodes[0];
+    if (first?.type === "codeBlockStart") {
+      code = { lang: first.lang, indent, content: [] };
+      continue;
+    }
+    blocks.push({ type: "line", indent, nodes: parseLine(line.slice(indent)) });
+  }
+
+  if (code !== null) {
+    blocks.push({ type: "code", lang: code.lang, content: code.content });
+  }
+  return blocks;
+}
