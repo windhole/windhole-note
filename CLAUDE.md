@@ -125,7 +125,7 @@ Status: Proposed | Accepted | Superseded by ADR-XXXX
 - フォーマット:
 
 ```markdown
-## HH:MM 〜 セッション概要(1行)
+## セッション概要(1行)
 
 ### やったこと
 - 箇条書きで簡潔に
