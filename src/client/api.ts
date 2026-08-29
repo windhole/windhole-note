@@ -27,6 +27,10 @@ export function getByTitle(title: string): Promise<Page> {
   );
 }
 
+export function searchPages(q: string): Promise<PageRef[]> {
+  return fetch(`/api/search?q=${encodeURIComponent(q)}`).then((res) => toJson<PageRef[]>(res));
+}
+
 export function savePage(
   id: string,
   body: { title: string; lines: string[]; leaving?: boolean },
