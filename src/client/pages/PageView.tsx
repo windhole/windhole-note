@@ -4,6 +4,7 @@ import type { PageDetail } from "../api";
 import { getPage } from "../api";
 import { Editor } from "../components/Editor";
 import { LineRenderer } from "../components/LineRenderer";
+import { SearchBox } from "../components/SearchBox";
 
 function RefList({ heading, refs }: { heading: string; refs: PageRef[] }) {
   if (refs.length === 0) return null;
@@ -59,6 +60,7 @@ export function PageView({ id }: { id: string }) {
     <main>
       <nav>
         <a href="#/">← 一覧</a>
+        <SearchBox />
         <button type="button" onClick={() => setEditing(!editing)}>
           {editing ? "表示" : "編集"}
         </button>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Page } from "../../shared/types";
 import { getByTitle, listPages } from "../api";
+import { SearchBox } from "../components/SearchBox";
 
 function PageCard({ page }: { page: Page }) {
   return (
@@ -37,6 +38,7 @@ export function ListPage() {
     <main>
       <header>
         <h1>windhole-note</h1>
+        <SearchBox />
         <form onSubmit={create}>
           <input
             value={title}
