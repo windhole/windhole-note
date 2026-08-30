@@ -3,7 +3,9 @@
 
 export type Node =
   | { type: "text"; text: string }
-  | { type: "link"; title: string }
+  // tag: true は `#タグ` 由来。リンク先の解決は `[タグ]` と同じで、
+  // 書いた見た目(先頭の #)を描画側で復元するためだけに持つ
+  | { type: "link"; title: string; tag?: true }
   | { type: "bold"; level: number; text: string }
   | { type: "url"; url: string }
   | { type: "image"; url: string }
@@ -51,7 +53,7 @@ export function parseLine(line: string): Node[] {
     if (match[1] !== undefined) {
       nodes.push(parseBracket(match[1]));
     } else if (match[2] !== undefined) {
-      nodes.push({ type: "link", title: match[2] });
+      nodes.push({ type: "link", title: match[2], tag: true });
     }
     lastIndex = BRACKET_OR_TAG.lastIndex;
   }

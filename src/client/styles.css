@@ -148,6 +148,11 @@ main > h1 {
   font-size: 0.95rem;
 }
 
+/* タグは書いたとおり # 付きで出る。本文中で拾いやすいよう少しだけ弱める */
+.content a.tag {
+  color: #78716c;
+}
+
 .content .bullet {
   color: #a8a29e;
   margin-right: 0.4em;
