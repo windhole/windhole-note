@@ -10,7 +10,7 @@ Scrapbox(Cosense)のローカル動作版。自分専用。自宅 MacBook Air �
 - DB: SQLite (`bun:sqlite`)。`data/pages.db` 1ファイル
 - 画像: `data/images/<sha256>.<ext>` にディスク保存
 - フロント: React + TypeScript。`Bun.serve` の HTML import で配信。Vite 不使用
-- 開発: `bun --hot server.ts`(HMR)。Claude Code は devcontainer 内で実行
+- 開発: `bun --hot server.ts`(HMR)。Claude Code on the web 上で開発する(ADR-0004)
 - 認証・複数ユーザー・リアルタイム同期・複数プロジェクト: なし
 
 ## ディレクトリ構成
@@ -21,7 +21,7 @@ scrapbox-local/
 ├── SPEC.md
 ├── package.json / bun.lock / tsconfig.json
 ├── .gitignore                # data/, node_modules/
-├── .devcontainer/            # 公式リファレンス設定 + Bun 追加
+├── .claude/hooks/            # SessionStart フック(リモートセッションで bun を用意)
 ├── server.ts                 # Bun.serve エントリ。HTML import と routes
 ├── migrations/
 │   └── 001_init.sql
