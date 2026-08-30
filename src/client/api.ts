@@ -41,6 +41,13 @@ export function restorePage(pageId: string, rid: number): Promise<Page> {
   );
 }
 
+// 論理削除。ページは物理的には消えないが、UI からは辿れなくなる
+export function deletePage(id: string): Promise<{ ok: true }> {
+  return fetch(`/api/pages/${id}`, { method: "DELETE" }).then((res) =>
+    toJson<{ ok: true }>(res),
+  );
+}
+
 export function searchPages(q: string): Promise<PageRef[]> {
   return fetch(`/api/search?q=${encodeURIComponent(q)}`).then((res) => toJson<PageRef[]>(res));
 }
