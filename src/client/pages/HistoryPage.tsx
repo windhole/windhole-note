@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { Revision, RevisionMeta } from "../../shared/types";
 import type { PageDetail } from "../api";
 import { getPage, getRevision, listRevisions, restorePage } from "../api";
+import { LineRenderer } from "../components/LineRenderer";
 
 function formatTime(ms: number): string {
   return new Date(ms).toLocaleString("ja-JP");
@@ -26,6 +27,8 @@ export function HistoryPage({ id }: { id: string }) {
   const [page, setPage] = useState<PageDetail | null>(null);
   const [revisions, setRevisions] = useState<RevisionMeta[]>([]);
   const [selected, setSelected] = useState<Revision | null>(null);
+  // 差分が主目的なので既定は diff。本文はその版の見た目を確かめたいときに切り替える
+  const [mode, setMode] = useState<"diff" | "body">("diff");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -91,11 +94,37 @@ export function HistoryPage({ id }: { id: string }) {
             <>
               <div className="revision-actions">
                 <h2>{formatTime(selected.saved_at)} の版</h2>
-                <button type="button" onClick={() => void restore()}>
-                  この版に戻す
-                </button>
+                <span className="revision-buttons">
+                  <span className="modes">
+                    <button
+                      type="button"
+                      className={mode === "diff" ? "selected" : ""}
+                      onClick={() => setMode("diff")}
+                    >
+                      差分
+                    </button>
+                    <button
+                      type="button"
+                      className={mode === "body" ? "selected" : ""}
+                      onClick={() => setMode("body")}
+                    >
+                      本文
+                    </button>
+                  </span>
+                  <button type="button" onClick={() => void restore()}>
+                    この版に戻す
+                  </button>
+                </span>
               </div>
-              <DiffView current={page.lines} revision={selected.lines} />
+              {mode === "diff" ? (
+                <DiffView current={page.lines} revision={selected.lines} />
+              ) : (
+                // その版が当時どう見えていたか。PageView と同じ描画を通す
+                <div className="revision-body">
+                  <h3>{selected.title}</h3>
+                  <LineRenderer lines={selected.lines.slice(1)} />
+                </div>
+              )}
             </>
           )}
         </div>
