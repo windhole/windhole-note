@@ -6,8 +6,13 @@ function NodeView({ node }: { node: SyntaxNode }) {
     case "text":
       return <>{node.text}</>;
     case "link":
-      // 未存在タイトルは開いたときに by-title が自動作成する(#/t/ ルート)
-      return <a href={`#/t/${encodeURIComponent(node.title)}`}>{node.title}</a>;
+      // 未存在タイトルは開いたときに by-title が自動作成する(#/t/ ルート)。
+      // `#タグ` は書いたとおり # 付きで見せる(リンク先は [タグ] と同じ)
+      return (
+        <a className={node.tag ? "tag" : undefined} href={`#/t/${encodeURIComponent(node.title)}`}>
+          {node.tag ? `#${node.title}` : node.title}
+        </a>
+      );
     case "url":
       return (
         <a href={node.url} target="_blank" rel="noreferrer">

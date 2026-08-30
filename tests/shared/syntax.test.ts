@@ -29,14 +29,20 @@ describe("parseLine", () => {
   });
 
   describe("#タグ", () => {
-    test("[タグ] と同じ link ノードになる", () => {
-      expect(parseLine("#タグ")).toEqual([{ type: "link", title: "タグ" }]);
+    test("[タグ] と同じリンク先になり、タグ由来の印が付く", () => {
+      expect(parseLine("#タグ")).toEqual([{ type: "link", title: "タグ", tag: true }]);
+    });
+
+    test("[タグ] 形式には tag の印が付かない", () => {
+      const node = parseLine("[タグ]")[0]!;
+      expect(node).toEqual({ type: "link", title: "タグ" });
+      expect(node.type === "link" && node.tag).toBeUndefined();
     });
 
     test("文中のタグと通常のリンクが混在する", () => {
       expect(parseLine("メモ #tag と [Link]")).toEqual([
         { type: "text", text: "メモ " },
-        { type: "link", title: "tag" },
+        { type: "link", title: "tag", tag: true },
         { type: "text", text: " と " },
         { type: "link", title: "Link" },
       ]);
