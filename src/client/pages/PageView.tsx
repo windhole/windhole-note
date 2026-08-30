@@ -1,26 +1,11 @@
 import { useEffect, useState } from "react";
-import type { Page, PageRef } from "../../shared/types";
+import type { Page } from "../../shared/types";
 import type { PageDetail } from "../api";
 import { deletePage, getPage } from "../api";
 import { Editor } from "../components/Editor";
 import { LineRenderer } from "../components/LineRenderer";
+import { RelatedPages } from "../components/RelatedPages";
 import { SearchBox } from "../components/SearchBox";
-
-function RefList({ heading, refs }: { heading: string; refs: PageRef[] }) {
-  if (refs.length === 0) return null;
-  return (
-    <section className="related">
-      <h3>{heading}</h3>
-      <ul>
-        {refs.map((ref) => (
-          <li key={ref.id}>
-            <a href={`#/p/${ref.id}`}>{ref.title}</a>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
 
 export function PageView({ id }: { id: string }) {
   const [page, setPage] = useState<PageDetail | null>(null);
@@ -92,8 +77,7 @@ export function PageView({ id }: { id: string }) {
           <LineRenderer lines={page.lines.slice(1)} />
         </>
       )}
-      <RefList heading="このページへのリンク" refs={page.backlinks} />
-      <RefList heading="2ホップ先" refs={page.twoHop} />
+      <RelatedPages backlinks={page.backlinks} twoHop={page.twoHop} />
     </main>
   );
 }
