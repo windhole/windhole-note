@@ -45,6 +45,15 @@ export function searchPages(q: string): Promise<PageRef[]> {
   return fetch(`/api/search?q=${encodeURIComponent(q)}`).then((res) => toJson<PageRef[]>(res));
 }
 
+// 画像 Blob をそのまま body に入れ、Content-Type に MIME を載せる(routes.ts の受け口に合わせる)
+export function uploadImage(file: Blob): Promise<{ url: string }> {
+  return fetch("/api/upload", {
+    method: "POST",
+    headers: { "content-type": file.type },
+    body: file,
+  }).then((res) => toJson<{ url: string }>(res));
+}
+
 export function savePage(
   id: string,
   body: { title: string; lines: string[]; leaving?: boolean },
