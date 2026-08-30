@@ -177,8 +177,25 @@ main > h1 {
   font-size: 1.25em;
 }
 
+.editor-wrap {
+  position: relative;
+}
+
+.uploading {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.7);
+  color: #fff;
+  font-size: 0.75rem;
+}
+
 .editor {
   width: 100%;
+  display: block;
   min-height: 60vh;
   padding: 0.75rem;
   border: 1px solid #d6d3d1;
