@@ -1,6 +1,6 @@
 import type { Database } from "bun:sqlite";
 import { ulid } from "ulid";
-import type { Page, Revision } from "../shared/types";
+import type { Page, Revision, RevisionMeta } from "../shared/types";
 import { rebuildLinks } from "./links";
 
 const REVISION_INTERVAL_MS = 10 * 60 * 1000;
@@ -15,12 +15,6 @@ export interface SaveOptions {
   leaving?: boolean;
   // テストで時計を注入するため。省略時は実時刻
   now?: number;
-}
-
-export interface RevisionMeta {
-  id: number;
-  saved_at: number;
-  line_count: number;
 }
 
 interface PageRow {

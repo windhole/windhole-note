@@ -17,6 +17,13 @@ export interface PageRef {
   title: string;
 }
 
+// 履歴一覧の1行分。本文は持たず行数だけ返す(SPEC.md の API)
+export interface RevisionMeta {
+  id: number;
+  saved_at: number;
+  line_count: number;
+}
+
 export interface Revision {
   id: number;
   page_id: string;
