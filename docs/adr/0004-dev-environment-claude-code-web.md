@@ -1,7 +1,7 @@
 # 0004. 開発環境を devcontainer から Claude Code on the web に変える
 
 Date: 2026-08-30
-Status: Proposed
+Status: Accepted
 
 ## Context
 
