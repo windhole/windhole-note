@@ -232,6 +232,10 @@ main > h1 {
   gap: 0.75rem;
 }
 
+.nav-actions .danger {
+  color: #b91c1c;
+}
+
 .history {
   display: grid;
   grid-template-columns: 220px 1fr;

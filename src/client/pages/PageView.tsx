@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Page, PageRef } from "../../shared/types";
 import type { PageDetail } from "../api";
-import { getPage } from "../api";
+import { deletePage, getPage } from "../api";
 import { Editor } from "../components/Editor";
 import { LineRenderer } from "../components/LineRenderer";
 import { SearchBox } from "../components/SearchBox";
@@ -46,6 +46,18 @@ export function PageView({ id }: { id: string }) {
     setPage((prev) => (prev ? { ...prev, ...saved } : prev));
   };
 
+  // 論理削除なので DB からは消えないが、UI からは戻せない。確認を挟む
+  const remove = async () => {
+    if (page === null) return;
+    if (!confirm(`「${page.title}」を削除しますか?`)) return;
+    try {
+      await deletePage(page.id);
+      location.hash = "#/";
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
   if (error !== null) {
     return (
       <main>
@@ -65,6 +77,9 @@ export function PageView({ id }: { id: string }) {
           <a href={`#/p/${id}/history`}>履歴</a>
           <button type="button" onClick={() => setEditing(!editing)}>
             {editing ? "表示" : "編集"}
+          </button>
+          <button type="button" className="danger" onClick={() => void remove()}>
+            削除
           </button>
         </span>
       </nav>
