@@ -1,4 +1,4 @@
-import type { Page, PageRef } from "../shared/types";
+import type { Page, PageRef, Revision, RevisionMeta } from "../shared/types";
 
 export interface PageDetail extends Page {
   backlinks: PageRef[];
@@ -23,6 +23,20 @@ export function getPage(id: string): Promise<PageDetail> {
 
 export function getByTitle(title: string): Promise<Page> {
   return fetch(`/api/pages/by-title/${encodeURIComponent(title)}`).then((res) =>
+    toJson<Page>(res),
+  );
+}
+
+export function listRevisions(pageId: string): Promise<RevisionMeta[]> {
+  return fetch(`/api/pages/${pageId}/revisions`).then((res) => toJson<RevisionMeta[]>(res));
+}
+
+export function getRevision(rid: number): Promise<Revision> {
+  return fetch(`/api/revisions/${rid}`).then((res) => toJson<Revision>(res));
+}
+
+export function restorePage(pageId: string, rid: number): Promise<Page> {
+  return fetch(`/api/pages/${pageId}/restore/${rid}`, { method: "POST" }).then((res) =>
     toJson<Page>(res),
   );
 }

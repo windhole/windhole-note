@@ -61,9 +61,12 @@ export function PageView({ id }: { id: string }) {
       <nav>
         <a href="#/">← 一覧</a>
         <SearchBox />
-        <button type="button" onClick={() => setEditing(!editing)}>
-          {editing ? "表示" : "編集"}
-        </button>
+        <span className="nav-actions">
+          <a href={`#/p/${id}/history`}>履歴</a>
+          <button type="button" onClick={() => setEditing(!editing)}>
+            {editing ? "表示" : "編集"}
+          </button>
+        </span>
       </nav>
       {editing ? (
         // 編集 → 表示に切り替えるとアンマウントされ、Editor の離脱時保存が走る

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { getByTitle } from "./api";
+import { HistoryPage } from "./pages/HistoryPage";
 import { ListPage } from "./pages/ListPage";
 import { PageView } from "./pages/PageView";
 
@@ -32,7 +33,9 @@ function TitleRedirect({ title }: { title: string }) {
 
 function App() {
   const hash = useHashRoute();
-  const pageMatch = hash.match(/^#\/p\/(.+)$/);
+  const historyMatch = hash.match(/^#\/p\/([^/]+)\/history$/);
+  if (historyMatch) return <HistoryPage id={historyMatch[1]!} />;
+  const pageMatch = hash.match(/^#\/p\/([^/]+)$/);
   if (pageMatch) return <PageView id={pageMatch[1]!} />;
   const titleMatch = hash.match(/^#\/t\/(.+)$/);
   if (titleMatch) {
